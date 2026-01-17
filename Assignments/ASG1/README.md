@@ -1,0 +1,1 @@
+The only content that is witin the assets directory is a png file for my website background.
