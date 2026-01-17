@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Assignment 1</title>
+
+  <!-- WebGL libs first -->
+  <script src="lib/webgl-utils.js"></script>
+  <script src="lib/webgl-debug.js"></script>
+  <script src="lib/cuon-utils.js"></script>
+
+  <!-- Your code -->
+  <script src="asg1.js"></script>
+
+  <style>
+    :root{
+      --bg1: #cfefff;
+      --bg2: #e9f8ff;
+      --ink: #0b2a3a;
+      --panel: rgba(255,255,255,0.60);
+      --panel2: rgba(255,255,255,0.35);
+      --stroke: rgba(11,42,58,0.18);
+      --shadow: 0 12px 30px rgba(0,0,0,0.10);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body{
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      /* Ocean watercolor background */
+      background:
+        radial-gradient(1200px 900px at 25% 10%, var(--bg2), transparent 60%),
+        radial-gradient(900px 700px at 80% 25%, #d7f3ff, transparent 60%),
+        linear-gradient(180deg, var(--bg2), var(--bg1));
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Optional: set this to YOUR image later */
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      background-image: url("assets/ocean-theme.png"); /* otter image */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 1;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    /* Soft overlay to keep content readable */
+    body::after{
+      content:"";
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.20);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .page{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 18px 40px;
+    }
+
+    .header{
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .title{
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .subtitle{
+      font-size: 13px;
+      opacity: 0.75;
+    }
+
+    .layout{
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .card{
+      border-radius: var(--radius);
+      background: var(--panel);
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      overflow: hidden;
+    }
+
+    .canvasWrap{
+      padding: 14px;
+    }
+
+    /* Make the canvas feel integrated with the theme */
+    #webgl{
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 14px;
+      border: 1px solid rgba(11,42,58,0.15);
+      background: rgba(255,255,255,0.10); /* lets background show through */
+    }
+
+    .panel{
+      padding: 14px;
+    }
+
+    .sectionTitle{
+      font-weight: 700;
+      font-size: 14px;
+      margin: 6px 0 10px;
+      opacity: 0.9;
+    }
+
+    .row{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 10px;
+      border-radius: 14px;
+      background: var(--panel2);
+      border: 1px solid rgba(11,42,58,0.10);
+      margin-bottom: 10px;
+    }
+
+    button{
+      border: 1px solid rgba(11,42,58,0.18);
+      background: rgba(255,255,255,0.75);
+      color: var(--ink);
+      padding: 8px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: transform 0.06s ease, background 0.15s ease;
+    }
+    button:hover{ background: rgba(255,255,255,0.92); }
+    button:active{ transform: translateY(1px); }
+
+    label{
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0.85;
+    }
+
+    input[type="range"]{
+      accent-color: #4bb7d8;
+    }
+
+    .hint{
+      font-size: 12px;
+      opacity: 0.72;
+      margin-top: 10px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 900px){
+      .layout{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body onload="main()">
+  <div class="page">
+    <div class="header">
+      <div>
+        <div class="title">ASG1 Paint</div>
+        <div class="subtitle">Click or drag to draw. Use the controls to change mode, color, size, and circle smoothness.</div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="card canvasWrap">
+        <canvas id="webgl" width="400" height="400">
+          Please use a browser that supports Canvas
+        </canvas>
+      </div>
+
+      <div class="card panel">
+        <div class="sectionTitle">Controls</div>
+
+        <div class="row">
+          <button id="clearButton">Clear Canvas</button>
+          <button id="drawPicButton">Draw Picture</button>
+        </div>
+
+        <div class="row">
+          <label>Mode:</label>
+          <button id="pointButton">Squares</button>
+          <button id="triButton">Triangles</button>
+          <button id="circleButton">Circles</button>
+        </div>
+
+                <div class="row rgbRow">
+        <div class="rgbHeader">
+            <strong>Shape Color</strong>
+            <span class="rgbSwatch" id="rgbSwatch" title="Current color"></span>
+        </div>
+
+        <div class="rgbGrid">
+            <div class="rgbLine">
+            <label for="redS">R</label>
+            <input type="range" id="redS" min="0" max="100" value="0" />
+            </div>
+
+            <div class="rgbLine">
+            <label for="greenS">G</label>
+            <input type="range" id="greenS" min="0" max="100" value="50" />
+            </div>
+
+            <div class="rgbLine">
+            <label for="blueS">B</label>
+            <input type="range" id="blueS" min="0" max="100" value="100" />
+            </div>
+        </div>
+        </div>
+
+
+        <div class="row">
+          <label for="sizeS">Size</label>
+          <input type="range" id="sizeS" min="1" max="40" value="10" />
+        </div>
+
+        <div class="row">
+          <label for="segS">Circle Segments</label>
+          <input type="range" id="segS" min="3" max="60" value="16" />
+        </div>
+
+        <div class="hint">
+          Tip: If circles look “triangular,” increase <strong>Circle Segments</strong>.
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
