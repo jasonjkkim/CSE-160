@@ -1,0 +1,90 @@
+<!-- asg2.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ASG 2 - Crocodile - Jason Kim - jkim662@ucsc.edu </title>
+
+    <!-- Load external libraries -->
+    <script src="lib/cuon-matrix.js"></script>
+    <script src="lib/cuon-utils.js"></script>
+    <script src="lib/webgl-debug.js"></script>
+    <script src="lib/webgl-utils.js"></script>
+
+    <style>
+      body { background: #111; color: #eee; font-family: system-ui, Arial, sans-serif; }
+      .row { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+      .panel { max-width: 900px; }
+      label { display: inline-flex; gap: 10px; align-items: center; }
+      input[type="range"] { width: 220px; }
+      button { padding: 6px 10px; }
+      #fps { font-variant-numeric: tabular-nums; opacity: 0.9; }
+      canvas { border: 1px solid #333; }
+    </style>
+  </head>
+
+  <body onload="main()">
+    <div class="panel">
+      <div class="row">
+        <canvas id="webgl" width="400" height="400">
+          Please use a browser that supports "canvas"
+        </canvas>
+
+        <div>
+          <div class="row">
+            <label>
+              Global Rotate (Y)
+              <input id="globalRot" type="range" min="-180" max="180" value="20" />
+              <span id="globalRotVal">20</span>
+            </label>
+          </div>
+
+          <div class="row">
+            <label>
+              Hip
+              <input id="hip" type="range" min="-60" max="60" value="15" />
+              <span id="hipVal">15</span>
+            </label>
+          </div>
+
+          <div class="row">
+            <label>
+              Knee
+              <input id="knee" type="range" min="-90" max="0" value="-35" />
+              <span id="kneeVal">-35</span>
+            </label>
+          </div>
+
+          <div class="row">
+            <label>
+              Ankle
+              <input id="ankle" type="range" min="-60" max="60" value="10" />
+              <span id="ankleVal">10</span>
+            </label>
+          </div>
+
+          <div class="row">
+            <label>
+              Jaw
+              <input id="jaw" type="range" min="0" max="45" value="10" />
+              <span id="jawVal">10</span>
+            </label>
+          </div>
+
+          <div class="row">
+            <button id="animOn">Animation ON</button>
+            <button id="animOff">Animation OFF</button>
+            <div id="fps">FPS: --</div>
+          </div>
+
+          <div style="opacity:0.9; font-size: 13px; line-height: 1.35;">
+            Mouse-drag on canvas to rotate (X/Y).<br/>
+            Shift + click = “poke” animation.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="asg2.js"></script>
+  </body>
+</html>
