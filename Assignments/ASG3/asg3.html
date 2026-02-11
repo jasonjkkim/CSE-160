@@ -1,0 +1,61 @@
+<!-- asg3.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ASG 3</title>
+
+    <!-- Libraries FIRST -->
+      <script src="lib/cuon-matrix-cse160.js"></script>
+      <script src="lib/cuon-utils.js"></script>
+      <script src="lib/webgl-debug.js"></script>
+      <script src="lib/webgl-utils.js"></script>
+
+      <!-- Geometry -->
+      <script src="geometry/geometry.js"></script>
+      <script src="geometry/cube.js"></script>
+      <script src="geometry/triangle.js"></script>
+      <script src="geometry/square.js"></script>
+
+      <!-- Camera -->
+      <script src="camera.js"></script>
+
+      <!-- App LAST -->
+      <script src="asg3.js"></script>
+
+    <style>
+      body { margin: 0; background: #111; color: #ddd; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+      #wrap { display: flex; gap: 12px; align-items: flex-start; padding: 12px; }
+      #hud {
+        min-width: 320px;
+        background: rgba(0,0,0,0.55);
+        border: 1px solid rgba(255,255,255,0.12);
+        padding: 10px 12px;
+        border-radius: 8px;
+        line-height: 1.35;
+        font-size: 14px;
+      }
+      #hud b { color: #fff; }
+      canvas { border: 1px solid rgba(255,255,255,0.15); }
+    </style>
+  </head>
+
+  <body onload="main()">
+    <div id="wrap">
+      <canvas id="webgl" width="700" height="500">
+        Please use a browser that supports "canvas"
+      </canvas>
+
+      <div id="hud">
+        <div><b>Controls</b></div>
+        <div>W/A/S/D: move</div>
+        <div>Q/E: rotate</div>
+        <div>Mouse drag: rotate</div>
+        <div>R: add block in front</div>
+        <div>F: delete block in front</div>
+        <hr style="border:0;border-top:1px solid rgba(255,255,255,0.12); margin:10px 0;">
+        <div id="status">Loading textures…</div>
+      </div>
+    </div>
+  </body>
+</html>
