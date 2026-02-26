@@ -1,0 +1,7 @@
+-Add sphere - DONE
+-Add normals - DONE
+-Add light - DONE
+-Add shading model
+  -Per Vertex - DONE
+  -Phong - DONE
+-Add a moving point light - DONE
